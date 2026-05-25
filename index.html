@@ -22,7 +22,7 @@
 
   <div class="app-container">
     
-    <!-- HEADER BRANDING & LANGUAGE/THEME/AUTH CONTROLS -->
+    <!-- HEADER BRANDING & LANGUAGE CONTROLS -->
     <header>
       <div class="brand-section">
         <div class="brand-logo">
@@ -39,22 +39,6 @@
       </div>
       
       <div class="header-actions">
-        <!-- Profile Widget -->
-        <div id="user-profile-widget" class="user-widget" style="display: none;">
-          <div>
-            <span class="user-name-display" id="profile-name-text">Minas</span>
-            <span class="logout-link" id="btn-logout" data-i18n="btn_delete">Sign Out</span>
-          </div>
-        </div>
-
-        <!-- Theme Switching Button -->
-        <button id="btn-toggle-theme" class="theme-toggle-btn" aria-label="Toggle light and dark theme">
-          <!-- Moon Icon SVG -->
-          <svg id="theme-moon-svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-          <!-- Sun Icon SVG -->
-          <svg id="theme-sun-svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-        </button>
-
         <button id="lang-am-btn" class="lang-btn" aria-label="Switch to Amharic">
           <span id="lang-am-indicator" class="active-indicator"></span> አማርኛ
         </button>
@@ -64,441 +48,235 @@
       </div>
     </header>
 
-    <!-- MOCK REGISTRATION AND LOGIN PANELS (AUTH VIEW) -->
-    <main id="auth-view" class="auth-container">
+    <!-- METRICS/STATS BOARD -->
+    <section class="stats-board" aria-label="Current Summary Statistics">
+      <div class="stat-card">
+        <div id="stat-total-expenses" class="stat-val">0.00 ETB</div>
+        <div class="stat-lbl" data-i18n="total_expenses">Total Expenses</div>
+      </div>
+      <div class="stat-card">
+        <div id="stat-active-units" class="stat-val">0</div>
+        <div class="stat-lbl" data-i18n="active_households">Active Units</div>
+      </div>
+      <div class="stat-card">
+        <div id="stat-residents" class="stat-val">0</div>
+        <div class="stat-lbl" data-i18n="total_occupants">Total Residents</div>
+      </div>
+    </section>
+
+    <!-- MAIN APP INTERACTION GRID -->
+    <main class="app-grid">
       
-      <!-- Panel 1: Login Card -->
-      <div id="login-card" class="auth-card">
-        <div class="auth-header">
-          <h2>🔒 Log In</h2>
-          <p>Access your shared building condominium room</p>
-        </div>
-        <form id="login-form">
-          <div class="form-group">
-            <label for="login-phone">Phone Number</label>
-            <input type="text" id="login-phone" required placeholder="0911223344">
+      <!-- LEFT-HAND COLUMN (INPUT FORMS) -->
+      <div class="inputs-panel" style="display: flex; flex-direction: column; gap: 25px;">
+        
+        <!-- CARD 1: HOUSEHOLD/RESIDENT DIRECTORY -->
+        <section class="glass-card" aria-labelledby="households-section-title">
+          <div class="card-title-section">
+            <h2 id="households-section-title" class="card-title">
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span data-i18n="households_title">Household Directory</span>
+            </h2>
           </div>
-          <div class="form-group">
-            <label for="login-password">Password</label>
-            <input type="password" id="login-password" required placeholder="••••••••">
+          <p class="card-subtitle" data-i18n="households_subtitle">Manage residents, occupancy, and exemptions</p>
+          
+          <!-- QUICK PRESETS BADGES -->
+          <div class="preset-badges-container">
+            <span style="font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; display: block;" data-i18n="quick_add_presets">Quick-Add Presets:</span>
+            <div class="preset-badges">
+              <button id="btn-preset-block" class="preset-badge" data-i18n="preset_block_b4">Standard Building (8 Units)</button>
+              <button id="btn-preset-shared" class="preset-badge" data-i18n="preset_shared_flat">Shared Student Flat (4 Units)</button>
+            </div>
           </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Log In</button>
-        </form>
-        <div style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);">
-          Don't have an account? <span id="link-to-register" class="auth-toggle-link">Register Profile</span>
-        </div>
+
+          <!-- HOUSEHOLD ADD FORM -->
+          <form id="add-household-form" style="margin-top: 15px;">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="household-flat" data-i18n="flat_no">Condo / Flat No.</label>
+                <input type="text" id="household-flat" required placeholder="e.g., B-4/102">
+              </div>
+              <div class="form-group">
+                <label for="household-name" data-i18n="resident_name">Resident Name</label>
+                <input type="text" id="household-name" required placeholder="e.g., Abebe Kebede">
+              </div>
+            </div>
+            
+            <div class="form-row" style="align-items: center;">
+              <div class="form-group">
+                <label for="household-occupants" data-i18n="occupants_count">No. of Residents</label>
+                <input type="number" id="household-occupants" value="2" min="0" max="20" required>
+              </div>
+              
+              <!-- Ground floor exemption toggle -->
+              <div class="form-group">
+                <div class="switch-container">
+                  <div class="switch-label-group">
+                    <span style="font-size: 13px; font-weight: 500;" data-i18n="ground_exempt">Is Ground Floor?</span>
+                    <span class="switch-subtext">Water Pump Exempt</span>
+                  </div>
+                  <label class="switch" for="household-ground-exempt">
+                    <input type="checkbox" id="household-ground-exempt">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row" style="align-items: center; margin-top: -5px;">
+              <!-- Student discount toggle -->
+              <div class="form-group" style="grid-column: span 2;">
+                <div class="switch-container">
+                  <div class="switch-label-group">
+                    <span style="font-size: 13px; font-weight: 500;" data-i18n="student_discount">Is Student / Shared?</span>
+                    <span class="switch-subtext">Pays half-share of bills</span>
+                  </div>
+                  <label class="switch" for="household-student-discount">
+                    <input type="checkbox" id="household-student-discount">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;" data-i18n="add_household">Add Household</button>
+          </form>
+
+          <!-- DYNAMIC HOUSEHOLD LIST -->
+          <div id="households-list-container" class="items-list">
+            <!-- Populated via JS -->
+          </div>
+        </section>
+
+        <!-- CARD 2: COMMUNAL BILL BOARD -->
+        <section class="glass-card" aria-labelledby="bills-section-title">
+          <div class="card-title-section">
+            <h2 id="bills-section-title" class="card-title">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <span data-i18n="bills_title">Communal Bills Board</span>
+            </h2>
+          </div>
+          <p class="card-subtitle" data-i18n="bills_subtitle">Input current month's irregular expenses</p>
+          
+          <!-- DYNAMIC BILL ROWS INPUT -->
+          <div id="bills-input-container">
+            <!-- Populated via JS -->
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <button id="btn-add-bill-row" class="btn btn-secondary" style="flex: 1;" data-i18n="add_bill">Add Expense Row</button>
+          </div>
+        </section>
+
+        <!-- CARD 3: CBE & TELEBIRR CONFIGURATION -->
+        <section class="glass-card" aria-labelledby="payment-section-title">
+          <div class="card-title-section">
+            <h2 id="payment-section-title" class="card-title">
+              <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              <span data-i18n="payment_title">Payment Information</span>
+            </h2>
+          </div>
+          <p class="card-subtitle" data-i18n="payment_subtitle">CBE & Telebirr transfer instructions</p>
+
+          <form id="collector-settings-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="collector-name" data-i18n="collector_name">Collector Name</label>
+                <input type="text" id="collector-name" placeholder="e.g., Committee B-4">
+              </div>
+              <div class="form-group">
+                <label for="telebirr-no" data-i18n="telebirr_no">Telebirr Number</label>
+                <input type="text" id="telebirr-no" placeholder="e.g., 0911223344">
+              </div>
+            </div>
+            
+            <div class="bank-inputs-grid">
+              <div class="form-group">
+                <label for="cbe-acc" data-i18n="cbe_acc">CBE Account Number</label>
+                <input type="text" id="cbe-acc" placeholder="e.g., 1000123456789">
+              </div>
+              <div class="form-group">
+                <label for="cbe-bank" data-i18n="cbe_bank">Bank Name</label>
+                <input type="text" id="cbe-bank" placeholder="Commercial Bank of Ethiopia">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" data-i18n="save_settings">Save Config</button>
+          </form>
+        </section>
+
       </div>
 
-      <!-- Panel 2: Registration Card -->
-      <div id="register-card" class="auth-card" style="display: none;">
-        <div class="auth-header">
-          <h2>📝 Register Profile</h2>
-          <p>Join the condominium cost-splitter community</p>
-        </div>
-        <form id="register-form">
-          <div class="form-group">
-            <label for="register-name">Full Name</label>
-            <input type="text" id="register-name" required placeholder="e.g., Minas Junior">
+      <!-- RIGHT-HAND COLUMN (CALCULATION & OUTPUT PREVIEWS) -->
+      <div class="results-panel">
+        
+        <!-- CARD 4: CALCULATION SPLIT BOARD -->
+        <section class="glass-card" aria-labelledby="results-section-title">
+          <div class="card-title-section">
+            <h2 id="results-section-title" class="card-title">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              <span data-i18n="results_title">Calculated Split Summary</span>
+            </h2>
           </div>
-          <div class="form-group">
-            <label for="register-phone">Phone Number (Telebirr Primary)</label>
-            <input type="text" id="register-phone" required placeholder="0911223344">
+          <p class="card-subtitle" data-i18n="results_subtitle">Instant individual breakdown & copyable templates</p>
+
+          <!-- VIEW SELECTION TABS -->
+          <nav class="tab-header" aria-label="Result View Mode">
+            <button id="tab-breakdown-btn" class="tab-btn active" data-i18n="tab_breakdown">Household Shares</button>
+            <button id="tab-template-btn" class="tab-btn" data-i18n="tab_template">Telegram Template</button>
+          </nav>
+
+          <!-- TAB VIEW A: DYNAMIC SHARES DIRECTORY -->
+          <div id="results-breakdown-view">
+            <div id="results-list-container" class="results-list">
+              <!-- Populated via JS -->
+            </div>
           </div>
-          <div class="form-group">
-            <label for="register-password">Password</label>
-            <input type="password" id="register-password" required placeholder="Create password">
+
+          <!-- TAB VIEW B: TELEGRAM READY TEMPLATE PREVIEW -->
+          <div id="results-template-view" style="display: none;">
+            <div class="template-container">
+              <textarea id="telegram-template-textarea" class="template-textarea" readonly aria-label="Formatted copy-pasteable Telegram template text"></textarea>
+            </div>
+            
+            <div class="template-actions">
+              <button id="btn-copy-template" class="btn btn-success">
+                <!-- Copy Clipboard Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                </svg>
+                <span data-i18n="btn_copy">Copy to Clipboard</span>
+              </button>
+            </div>
           </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Create Profile</button>
-        </form>
-        <div style="text-align: center; margin-top: 20px; font-size: 13px; color: var(--text-muted);">
-          Already registered? <span id="link-to-login" class="auth-toggle-link">Log In here</span>
-        </div>
+
+          <!-- DYNAMIC UTILITIES ACTION FOOTER -->
+          <div class="section-divider"></div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button id="btn-log-history" class="btn btn-primary" style="flex: 1.2;" data-i18n="btn_save_history">Log Month to History</button>
+            <button id="btn-clear-calculator" class="btn btn-danger" style="flex: 0.8;" data-i18n="btn_clear">Reset Calculator</button>
+          </div>
+        </section>
+
+        <!-- CARD 5: HISTORY TRACKER -->
+        <section class="glass-card" aria-labelledby="history-section-title">
+          <div class="card-title-section">
+            <h2 id="history-section-title" class="card-title">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span data-i18n="history_title">Past Split Logs</span>
+            </h2>
+            <button id="btn-clear-history" class="btn btn-danger" style="font-size: 11px; padding: 4px 10px; border-radius: var(--radius-sm);" data-i18n="btn_clear_history">Clear Logs</button>
+          </div>
+
+          <!-- LIST OF SAVED SESSIONS -->
+          <div id="history-logs-container">
+            <!-- Populated via JS -->
+          </div>
+        </section>
+
       </div>
 
     </main>
-
-    <!-- MAIN APP PANEL (VISIBLE AFTER AUTH) -->
-    <div id="app-view" style="display: none;">
-      
-      <!-- COLLAPSIBLE FIRST-TIME HELP EXPLAINER SECTION -->
-      <section id="onboarding-help-box" class="help-card" aria-label="First-time user onboarding tutorial">
-        <button class="close-help-btn" id="btn-close-help" aria-label="Close explainer panel">&times;</button>
-        <div class="help-title">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-          <span>Welcome to Condo-Calc! How to get started:</span>
-        </div>
-        <p style="font-size: 12px; color: var(--text-secondary); max-width: 90%;">
-          In Ethiopian urban centers like Addis Ababa, sharing residential blocks means splitting fluctuating service costs. Condo-Calc automates this task and gamifies payments with neighbors. Follow these 4 easy steps:
-        </p>
-        <div class="help-steps">
-          <div class="help-step">
-            <span class="help-step-num">Step 1: Setup a Room 🏘️</span>
-            Create a custom room directory or join an existing virtual block (e.g. Block B-4).
-          </div>
-          <div class="help-step">
-            <span class="help-step-num">Step 2: Add Block Residents 👥</span>
-            Add households, flat numbers, occupants, and custom exemptions (such as Ground Floor water pump discounts).
-          </div>
-          <div class="help-step">
-            <span class="help-step-num">Step 3: Distribute Core Bills 💰</span>
-            Distribute core condominium bills: **Water**, **Electricity**, and **Security** amongst members instantly.
-          </div>
-          <div class="help-step">
-            <span class="help-step-num">Step 4: Pay & Win Streaks 🟩</span>
-            Mark your bills as paid, win early payment discounts, and grow your **Coffee-Bean Streak Board**!
-          </div>
-        </div>
-      </section>
-
-      <!-- DUE DATE ACTIVE NOTIFICATION BANNER -->
-      <section id="due-date-alert" class="notification-banner" style="display: none;" aria-label="Urgent due date alert warning">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-        <div>
-          <span style="font-weight: 700;">🚨 Pay Attention:</span> 
-          Communal Condo bills for <span id="alert-room-name">Block B-4</span> are due! Deadline is the <span id="alert-due-date">25th</span> of this month. Pay now to maintain your streak!
-        </div>
-      </section>
-
-      <!-- STATS SUMMARY METRICS BOARD -->
-      <section class="stats-board" aria-label="Current Summary Statistics">
-        <div class="stat-card">
-          <div id="stat-total-expenses" class="stat-val">0.00 ETB</div>
-          <div class="stat-lbl" data-i18n="total_expenses">Total Expenses</div>
-        </div>
-        <div class="stat-card">
-          <div id="stat-active-units" class="stat-val">0</div>
-          <div class="stat-lbl" data-i18n="active_households">Active Units</div>
-        </div>
-        <div class="stat-card">
-          <div id="stat-residents" class="stat-val">0</div>
-          <div class="stat-lbl" data-i18n="total_occupants">Total Residents</div>
-        </div>
-      </section>
-
-      <!-- TWO COLUMN LAYOUT GRID -->
-      <main class="app-grid">
-        
-        <!-- LEFT COLUMN: ROOM & BILL CONFIGURATIONS -->
-        <div class="inputs-panel" style="display: flex; flex-direction: column; gap: 25px;">
-          
-          <!-- CARD A: ROOM BUILDER & SWITCHER -->
-          <section class="glass-card" aria-labelledby="room-section-title">
-            <div class="card-title-section">
-              <h2 id="room-section-title" class="card-title">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                <span>Condominium Room Hub</span>
-              </h2>
-            </div>
-            
-            <div class="room-details-box" id="active-room-box" style="display: none;">
-              <div class="room-meta-item">
-                <span class="room-meta-lbl">Active Room:</span>
-                <span class="room-meta-val" id="text-room-name">Block B-4</span>
-              </div>
-              <div class="room-meta-item">
-                <span class="room-meta-lbl">Monthly Due Date:</span>
-                <span class="room-meta-val" id="text-due-date">25th of the month</span>
-              </div>
-              <div class="room-meta-item">
-                <span class="room-meta-lbl">Early Pay Discount:</span>
-                <span class="room-meta-val" id="text-discount-percentage">5% Bonus</span>
-              </div>
-              <span id="early-bonus-banner" class="bonus-badge">Early bird discount active!</span>
-            </div>
-
-            <!-- Form: Create a Room -->
-            <form id="create-room-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="room-name">Room / Block Name</label>
-                  <input type="text" id="room-name" required placeholder="e.g., Condo Block B-4">
-                </div>
-                <div class="form-group">
-                  <label for="room-due-date">Monthly Due Date</label>
-                  <select id="room-due-date">
-                    <option value="5">5th of month</option>
-                    <option value="10">10th of month</option>
-                    <option value="15">15th of month</option>
-                    <option value="20">20th of month</option>
-                    <option value="25" selected>25th of month</option>
-                    <option value="28">28th of month</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group" style="grid-column: span 2;">
-                  <label for="room-bonus">Early Pay Discount (%)</label>
-                  <input type="number" id="room-bonus" value="5" min="0" max="50">
-                </div>
-              </div>
-
-              <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Setup Room Directory</button>
-            </form>
-            
-            <!-- Room Switcher dropdown -->
-            <div id="room-selector-wrapper" style="margin-top: 15px; display: none;">
-              <label for="room-selector">Switch Active Room:</label>
-              <select id="room-selector">
-                <!-- Loaded dynamically -->
-              </select>
-            </div>
-          </section>
-
-          <!-- CARD B: CORE CONDO BILL BOARD (WATER, ELECTRICITY, SECURITY) -->
-          <section class="glass-card" aria-labelledby="bills-section-title">
-            <div class="card-title-section">
-              <h2 id="bills-section-title" class="card-title">
-                <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                <span>Core Condominium Expenses</span>
-              </h2>
-            </div>
-            <p class="card-subtitle">Adjust core water, power, and guard bills per condo guidelines</p>
-            
-            <div id="condo-bills-board">
-              <!-- Slider 1: Water Expense -->
-              <div class="slider-group">
-                <div class="slider-header">
-                  <span data-i18n="bill_water">Shared Utility Water</span>
-                  <span id="val-water-bill" class="slider-val">2000 ETB</span>
-                </div>
-                <input type="range" id="input-water-bill" min="0" max="15000" step="100" value="2000">
-                <div class="form-row" style="margin-top: 5px;">
-                  <select id="method-water-bill" class="bill-method-select" style="padding: 4px 8px; font-size: 12px;">
-                    <option value="equal">Weighted (Equal + Discounts)</option>
-                    <option value="flat">Strictly Flat (No Discounts)</option>
-                    <option value="headcount" selected>Per Capita (By Residents)</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Slider 2: Electricity Expense -->
-              <div class="slider-group">
-                <div class="slider-header">
-                  <span data-i18n="bill_pump">Water Pump Fuel & Elec</span>
-                  <span id="val-elec-bill" class="slider-val">1500 ETB</span>
-                </div>
-                <input type="range" id="input-elec-bill" min="0" max="15000" step="100" value="1500">
-                <div class="form-row" style="margin-top: 5px;">
-                  <select id="method-elec-bill" class="bill-method-select" style="padding: 4px 8px; font-size: 12px;">
-                    <option value="equal" selected>Weighted (Equal + Exemptions)</option>
-                    <option value="flat">Strictly Flat (No Discounts)</option>
-                    <option value="headcount">Per Capita (By Residents)</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Slider 3: Security Expense -->
-              <div class="slider-group">
-                <div class="slider-header">
-                  <span data-i18n="bill_security">Security Guard Fee</span>
-                  <span id="val-security-bill" class="slider-val">3000 ETB</span>
-                </div>
-                <input type="range" id="input-security-bill" min="0" max="15000" step="100" value="3000">
-                <div class="form-row" style="margin-top: 5px;">
-                  <select id="method-security-bill" class="bill-method-select" style="padding: 4px 8px; font-size: 12px;">
-                    <option value="equal" selected>Weighted (Equal + Discounts)</option>
-                    <option value="flat">Strictly Flat (No Discounts)</option>
-                    <option value="headcount">Per Capita (By Residents)</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- CARD C: RESIDENTS IN DIRECTORY -->
-          <section class="glass-card" aria-labelledby="households-section-title">
-            <div class="card-title-section">
-              <h2 id="households-section-title" class="card-title">
-                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                <span data-i18n="households_title">Household Directory</span>
-              </h2>
-            </div>
-            <p class="card-subtitle" data-i18n="households_subtitle">Manage residents, occupancy, and exemptions</p>
-
-            <!-- HOUSEHOLD ADD FORM -->
-            <form id="add-household-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="household-flat" data-i18n="flat_no">Condo / Flat No.</label>
-                  <input type="text" id="household-flat" required placeholder="e.g., B-4/102">
-                </div>
-                <div class="form-group">
-                  <label for="household-name" data-i18n="resident_name">Resident Name</label>
-                  <input type="text" id="household-name" required placeholder="e.g., Abebe Kebede">
-                </div>
-              </div>
-              
-              <div class="form-row" style="align-items: center;">
-                <div class="form-group">
-                  <label for="household-occupants" data-i18n="occupants_count">No. of Residents</label>
-                  <input type="number" id="household-occupants" value="2" min="0" max="20" required>
-                </div>
-                
-                <!-- Ground floor exemption toggle -->
-                <div class="form-group">
-                  <div class="switch-container">
-                    <div class="switch-label-group">
-                      <span style="font-size: 13px; font-weight: 500;" data-i18n="ground_exempt">Is Ground Floor?</span>
-                      <span class="switch-subtext">Water Pump Exempt</span>
-                    </div>
-                    <label class="switch" for="household-ground-exempt">
-                      <input type="checkbox" id="household-ground-exempt">
-                      <span class="slider"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-row" style="align-items: center; margin-top: -5px;">
-                <!-- Student discount toggle -->
-                <div class="form-group" style="grid-column: span 2;">
-                  <div class="switch-container">
-                    <div class="switch-label-group">
-                      <span style="font-size: 13px; font-weight: 500;" data-i18n="student_discount">Is Student / Shared?</span>
-                      <span class="switch-subtext">Pays half-share of bills</span>
-                    </div>
-                    <label class="switch" for="household-student-discount">
-                      <input type="checkbox" id="household-student-discount">
-                      <span class="slider"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;" data-i18n="add_household">Add Household</button>
-            </form>
-
-            <!-- DYNAMIC HOUSEHOLD LIST -->
-            <div id="households-list-container" class="items-list">
-              <!-- Populated via JS -->
-            </div>
-          </section>
-
-        </div>
-
-        <!-- RIGHT COLUMN: SPLIT SUMMARIES & GAMIFIED STREAKS -->
-        <div class="results-panel">
-          
-          <!-- CARD D: GAMIFIED STREAK GRID & MOCK PAYMENT CONTROLS -->
-          <section class="glass-card" aria-labelledby="streak-section-title">
-            <div class="card-title-section">
-              <h2 id="streak-section-title" class="card-title">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-                <span>My Coffee-Bean Activity & Streaks</span>
-              </h2>
-            </div>
-            <p class="card-subtitle">Mark payments on time to roast golden espresso beans!</p>
-
-            <div class="streak-box">
-              <div class="streak-header-row">
-                <span style="font-size: 13px; font-weight: 600; color: var(--text-secondary);">Payment Streaks:</span>
-                <span id="streak-score-counter" class="streak-score">0 Month Streak 🔥</span>
-              </div>
-              
-              <!-- 12 cell Coffee Bean activity tracker -->
-              <div class="bean-grid" id="coffee-bean-grid">
-                <!-- JS builds cells -->
-              </div>
-            </div>
-
-            <!-- Instant payment actions -->
-            <div class="payment-action-box" style="display: flex; flex-direction: column; gap: 10px;">
-              <div class="room-meta-item" style="margin-bottom: 5px;">
-                <span class="room-meta-lbl">My Net Share:</span>
-                <span class="room-meta-val" id="my-share-val" style="font-size: 18px; color: var(--accent-gold);">0.00 ETB</span>
-              </div>
-              <button id="btn-pay-now" class="btn btn-success" style="width: 100%;">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-                <span>Mock Pay via Telebirr</span>
-              </button>
-            </div>
-          </section>
-
-          <!-- CARD E: CALCULATION CALCULATOR PORTLET -->
-          <section class="glass-card" aria-labelledby="results-section-title">
-            <div class="card-title-section">
-              <h2 id="results-section-title" class="card-title">
-                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                <span data-i18n="results_title">Calculated Split Summary</span>
-              </h2>
-            </div>
-            
-            <nav class="tab-header" aria-label="Result View Mode">
-              <button id="tab-breakdown-btn" class="tab-btn active" data-i18n="tab_breakdown">Household Shares</button>
-              <button id="tab-template-btn" class="tab-btn" data-i18n="tab_template">Telegram Template</button>
-            </nav>
-
-            <div id="results-breakdown-view">
-              <div id="results-list-container" class="results-list">
-                <!-- Populated via JS -->
-              </div>
-            </div>
-
-            <div id="results-template-view" style="display: none;">
-              <div class="template-container">
-                <textarea id="telegram-template-textarea" class="template-textarea" readonly aria-label="Formatted copy-pasteable Telegram template text"></textarea>
-              </div>
-              <div class="template-actions">
-                <button id="btn-copy-template" class="btn btn-success">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
-                  <span data-i18n="btn_copy">Copy to Clipboard</span>
-                </button>
-              </div>
-            </div>
-
-            <div class="section-divider"></div>
-            
-            <!-- Dynamic Telebirr / CBE Collector details -->
-            <form id="collector-settings-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="collector-name" data-i18n="collector_name">Collector Name</label>
-                  <input type="text" id="collector-name" placeholder="e.g., Committee B-4">
-                </div>
-                <div class="form-group">
-                  <label for="telebirr-no" data-i18n="telebirr_no">Telebirr Number</label>
-                  <input type="text" id="telebirr-no" placeholder="e.g., 0911223344">
-                </div>
-              </div>
-              
-              <div class="bank-inputs-grid">
-                <div class="form-group">
-                  <label for="cbe-acc" data-i18n="cbe_acc">CBE Account Number</label>
-                  <input type="text" id="cbe-acc" placeholder="e.g., 1000123456789">
-                </div>
-                <div class="form-group">
-                  <label for="cbe-bank" data-i18n="cbe_bank">Bank Name</label>
-                  <input type="text" id="cbe-bank" placeholder="Commercial Bank of Ethiopia">
-                </div>
-              </div>
-
-              <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
-                <button type="submit" class="btn btn-secondary" style="flex: 1;" data-i18n="save_settings">Save Config</button>
-                <button type="button" id="btn-log-history" class="btn btn-primary" style="flex: 1.2;" data-i18n="btn_save_history">Log Month to History</button>
-              </div>
-            </form>
-          </section>
-
-          <!-- CARD F: HISTORICAL ARCHIVES -->
-          <section class="glass-card" aria-labelledby="history-section-title">
-            <div class="card-title-section">
-              <h2 id="history-section-title" class="card-title">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                <span data-i18n="history_title">Past Split Logs</span>
-              </h2>
-              <button id="btn-clear-history" class="btn btn-danger" style="font-size: 11px; padding: 4px 10px; border-radius: var(--radius-sm);" data-i18n="btn_clear_history">Clear Logs</button>
-            </div>
-            <div id="history-logs-container">
-              <!-- Populated via JS -->
-            </div>
-          </section>
-
-        </div>
-
-      </main>
-
-    </div>
 
     <!-- FOOTER SIGNATURE -->
     <footer>

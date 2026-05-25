@@ -1,19 +1,19 @@
-// Condo-Calc v2 - Core Community Portal Engine & State Processor
+// Condo-Calc - Core Application Logic & State Controller
 
-// 1. Bilingual UI Translates
+// 1. Bilingual Translation Dictionary (English and Amharic)
 const I18N = {
   en: {
     app_title: "Condo-Calc",
-    app_subtitle: "Shared Condo Portal & Splitter",
+    app_subtitle: "Ethiopian Condo Expense Splitter",
     total_expenses: "Total Expenses",
     active_households: "Active Units",
     total_occupants: "Total Residents",
     
     // Cards
-    households_title: "Resident Directory",
-    households_subtitle: "Manage neighbors, occupancy, and exemptions",
-    bills_title: "Condominium Monthly Bills",
-    bills_subtitle: "Adjust core water, power, and guard bills per condo guidelines",
+    households_title: "Household Directory",
+    households_subtitle: "Manage residents, occupancy, and exemptions",
+    bills_title: "Communal Bills Board",
+    bills_subtitle: "Input current month's irregular expenses",
     payment_title: "Payment Information",
     payment_subtitle: "CBE & Telebirr transfer instructions",
     results_title: "Calculated Split Summary",
@@ -26,12 +26,23 @@ const I18N = {
     occupants_count: "No. of Residents",
     ground_exempt: "Is Ground Floor? (Water Pump Exempt)",
     student_discount: "Is Student / Shared? (Half Share)",
-    add_household: "Add Resident Neighbor",
+    add_household: "Add Household",
     quick_add_presets: "Quick-Add Presets:",
     preset_block_b4: "Standard Building (8 Units)",
     preset_shared_flat: "Shared Student Flat (4 Units)",
     
-    // Core Condo Bills
+    // Forms - Bills
+    bill_name: "Expense Name",
+    bill_amount: "Amount (ETB)",
+    split_method: "Split Method",
+    add_bill: "Add Expense Row",
+    
+    // Split Methods
+    method_equal: "Weighted (Equal + Discounts)",
+    method_flat: "Strictly Flat (No Discounts)",
+    method_headcount: "Per Capita (By Residents)",
+    
+    // Default Bills
     bill_security: "Security Guard Fee",
     bill_garbage: "Garbage Collection",
     bill_pump: "Water Pump Fuel & Elec",
@@ -54,7 +65,7 @@ const I18N = {
     ph_bank: "Commercial Bank of Ethiopia",
     
     // Result tabs
-    tab_breakdown: "Resident Shares",
+    tab_breakdown: "Household Shares",
     tab_template: "Telegram Template",
     
     // Actions & Buttons
@@ -73,7 +84,7 @@ const I18N = {
     modal_close: "Close",
     
     // Empty states
-    empty_households: "No households registered yet. Add some above!",
+    empty_households: "No households registered yet. Add some above or load a preset!",
     empty_bills: "No active expenses. Enter items to see calculation details.",
     empty_history: "No historical records logged in this browser yet.",
     
@@ -84,7 +95,7 @@ const I18N = {
     confirm_clear_history: "Are you sure you want to delete all historical logs?",
     
     // Template Texts
-    tpl_header: "🔔 MONTHLY CONDO EXPENSES Split",
+    tpl_header: "🔔 MONTHLY BUILDING EXPENSES Split",
     tpl_month: "📅 Date / Period",
     tpl_total: "💰 Total Budget",
     tpl_breakdown_hdr: "📋 Resident Payment Breakdown",
@@ -107,8 +118,8 @@ const I18N = {
     // Cards
     households_title: "የነዋሪዎች መዝገብ",
     households_subtitle: "ነዋሪዎችን፣ የእነሱን ብዛት እና ልዩ ሁኔታዎችን ያስተዳድሩ",
-    bills_title: "የኮንዶሚኒየም ወርሃዊ ወጪዎች",
-    bills_subtitle: "የመጠጥ ውሃ፣ የጋራ መብራት እና የጥበቃ ወጪዎችን በኮንዶ ደንብ መሠረት ያዘጋጁ",
+    bills_title: "የጋራ ወጪዎች ሰሌዳ",
+    bills_subtitle: "የዚህን ወር ተለዋዋጭ ወጪዎች ያስገቡ",
     payment_title: "የክፍያ መረጃ",
     payment_subtitle: "የቴሌብር እና CBE የባንክ አካውንት ዝርዝሮች",
     results_title: "የክፍያ ድምር ስሌት",
@@ -121,12 +132,23 @@ const I18N = {
     occupants_count: "የነዋሪዎች ብዛት (በሰው)",
     ground_exempt: "መሬት ወለል ነው? (ከውሃ ፓምፕ ክፍያ ነፃ)",
     student_discount: "ተማሪ/ተጋሪ ነው? (ግማሽ ክፍያ)",
-    add_household: "አዲስ ነዋሪ ጎረቤት ጨምር",
+    add_household: "ነዋሪ ጨምር",
     quick_add_presets: "ቀድመው የተዘጋጁ presets:",
     preset_block_b4: "መደበኛ ህንፃ (8 ቤቶች)",
     preset_shared_flat: "የተማሪዎች የጋራ ቤት (4 ሰዎች)",
     
-    // Core Condo Bills
+    // Forms - Bills
+    bill_name: "የወጪ ዓይነት",
+    bill_amount: "የገንዘብ መጠን (በብር)",
+    split_method: "የማካፈያ ዘዴ",
+    add_bill: "አዲስ የወጪ መስመር",
+    
+    // Split Methods
+    method_equal: "ሚዛናዊ (የእኩል ክፍያ + ቅናሾች)",
+    method_flat: "እኩል ክፍያ (ያለ ምንም ቅናሽ)",
+    method_headcount: "በነዋሪዎች ቁጥር (በራስ)",
+    
+    // Default Bills
     bill_security: "የጥበቃ/ዘበኛ ክፍያ",
     bill_garbage: "የቆሻሻ ማንሻ ክፍያ",
     bill_pump: "የውሃ ፓምፕ ማሽከርከሪያ ነዳጅ/መብራት",
@@ -168,7 +190,7 @@ const I18N = {
     modal_close: "ዝጋ",
     
     // Empty states
-    empty_households: "እስካሁን ምንም ነዋሪ አልተመዘገበም። ከላይ ነዋሪዎችን ይጨምሩ!",
+    empty_households: "እስካሁን ምንም ነዋሪ አልተመዘገበም። ከላይ ነዋሪዎችን ይጨምሩ ወይም preset ይጫኑ!",
     empty_bills: "ምንም ወጪዎች አልገቡም። ስሌቶችን ለማየት እባክዎ የወጪ መስመሮችን ያስገቡ።",
     empty_history: "እስካሁን በዚህ ብሮውዘር ላይ የተመዘገበ ምንም ታሪክ የለም።",
     
@@ -194,260 +216,154 @@ const I18N = {
   }
 };
 
-// 2. State definitions for Condo-Calc v2
+// 2. Application State
 let state = {
-  theme: 'dark', // 'dark' or 'light'
-  language: 'am',
-  activeUser: null, // Track logged-in user object { phone, name, streak, paidMonths: [] }
-  activeRoomId: null, // Selected Room ID
-  rooms: [], // Collection of created Rooms
+  language: 'am', // Default is Amharic for Ethiopian context, can switch to English
+  households: [],
+  bills: [],
+  collectorSettings: {
+    name: '',
+    telebirr: '',
+    cbeAccount: '',
+    cbeBank: ''
+  },
   history: []
 };
 
-// Predefined registered users mock database
-let registeredUsers = [];
+// Default preset configuration
+const PRESETS = {
+  blockB4: [
+    { id: 'h1', number: '101', name: 'Almaz Belay', occupants: 4, groundExempt: true, studentDiscount: false, active: true },
+    { id: 'h2', number: '102', name: 'Abebe Kebede', occupants: 3, groundExempt: true, studentDiscount: false, active: true },
+    { id: 'h3', number: '201', name: 'Bethelhem Yohannes', occupants: 5, groundExempt: false, studentDiscount: false, active: true },
+    { id: 'h4', number: '202', name: 'Dawit Tadesse', occupants: 2, groundExempt: false, studentDiscount: false, active: true },
+    { id: 'h5', number: '301', name: 'Chernet Alemu', occupants: 4, groundExempt: false, studentDiscount: false, active: true },
+    { id: 'h6', number: '302', name: 'Helen & Friends (Students)', occupants: 4, groundExempt: false, studentDiscount: true, active: true },
+    { id: 'h7', number: '401', name: 'Yared Shimelis', occupants: 1, groundExempt: false, studentDiscount: false, active: true },
+    { id: 'h8', number: '402', name: 'Vacant Unit', occupants: 0, groundExempt: false, studentDiscount: false, active: false }
+  ],
+  sharedFlat: [
+    { id: 'sf1', number: 'Room A', name: 'Kidus (Student)', occupants: 1, groundExempt: false, studentDiscount: true, active: true },
+    { id: 'sf2', number: 'Room B', name: 'Sara (Student)', occupants: 1, groundExempt: false, studentDiscount: true, active: true },
+    { id: 'sf3', number: 'Room C', name: 'Fitsum & Tariku', occupants: 2, groundExempt: false, studentDiscount: false, active: true },
+    { id: 'sf4', number: 'Room D', name: 'Meron', occupants: 1, groundExempt: false, studentDiscount: false, active: true }
+  ]
+};
 
-// Monthly Abbreviations for Coffee-Bean Grid
-const MONTH_ABBRS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const MONTH_NAMES_AM = ['ጥር (Jan)', 'የካቲት (Feb)', 'መጋቢት (Mar)', 'ሚያዝያ (Apr)', 'ግንቦት (May)', 'ሰኔ (Jun)', 'ሐምሌ (Jul)', 'ነሐሴ (Aug)', 'መስከረም (Sep)', 'ጥቅምት (Oct)', 'ህዳር (Nov)', 'ታህሳስ (Dec)'];
-
-// Presets for new room creations
-const DEFAULT_RESIDENTS_PRESET = [
-  { id: 'h1', number: '101', name: 'Almaz Belay', occupants: 4, groundExempt: true, studentDiscount: false, active: true, paid: false },
-  { id: 'h2', number: '102', name: 'Abebe Kebede', occupants: 3, groundExempt: true, studentDiscount: false, active: true, paid: false },
-  { id: 'h3', number: '201', name: 'Yared Shimelis', occupants: 5, groundExempt: false, studentDiscount: false, active: true, paid: false },
-  { id: 'h4', number: '202', name: 'Helen & Friends (Students)', occupants: 4, groundExempt: false, studentDiscount: true, active: true, paid: false },
-  { id: 'h5', number: '301', name: 'Dawit Tadesse', occupants: 2, groundExempt: false, studentDiscount: false, active: true, paid: false }
-];
-
-// 3. Initialization
+// 3. Initialize App
 document.addEventListener('DOMContentLoaded', () => {
   loadFromLocalStorage();
   registerServiceWorker();
   
-  // Set theme class
-  if (state.theme === 'light') {
-    document.body.classList.add('light-theme');
-    document.getElementById('theme-moon-svg').style.display = 'none';
-    document.getElementById('theme-sun-svg').style.display = 'inline-block';
-  } else {
-    document.body.classList.remove('light-theme');
-    document.getElementById('theme-moon-svg').style.display = 'inline-block';
-    document.getElementById('theme-sun-svg').style.display = 'none';
-  }
-
-  // Handle collapsible onboarding help box
-  const isHelpCollapsed = localStorage.getItem('condo_onboarding_collapsed') === 'true';
-  const helpBox = document.getElementById('onboarding-help-box');
-  if (isHelpCollapsed) {
-    helpBox.classList.add('collapsed');
-  }
-
-  // Setup views based on user session status
-  toggleAuthAppView();
+  // Set initial language UI
+  updateUILanguage();
   
-  // Setup Event Listeners
+  // Render views
+  renderHouseholds();
+  renderBillsInputBoard();
+  calculateAndRenderResults();
+  renderHistory();
+  
+  // Set up Event Listeners
   setupEventListeners();
 });
 
-// Service worker setup
+// Load from LocalStorage
+function loadFromLocalStorage() {
+  const savedState = localStorage.getItem('condo_calc_state');
+  if (savedState) {
+    try {
+      const parsed = JSON.parse(savedState);
+      state = { ...state, ...parsed };
+    } catch (e) {
+      console.error('Failed to parse localStorage state', e);
+    }
+  } else {
+    // Initial empty state with some default settings
+    state.collectorSettings = {
+      name: 'Building B-4 Expense Committee',
+      telebirr: '0911223344',
+      cbeAccount: '1000123456789',
+      cbeBank: 'Commercial Bank of Ethiopia'
+    };
+    // Load some default active bills to prompt the user
+    state.bills = [
+      { id: 'b1', name: 'Security Guard Fee', amount: 3500, splitMethod: 'equal' },
+      { id: 'b2', name: 'Garbage Collection', amount: 1500, splitMethod: 'equal' },
+      { id: 'b3', name: 'Water Pump Fuel & Elec', amount: 4000, splitMethod: 'equal' },
+      { id: 'b4', name: 'Shared Hallway Light', amount: 2000, splitMethod: 'equal' }
+    ];
+    // Default households
+    state.households = JSON.parse(JSON.stringify(PRESETS.blockB4));
+    saveToLocalStorage();
+  }
+}
+
+// Save to LocalStorage
+function saveToLocalStorage() {
+  localStorage.setItem('condo_calc_state', JSON.stringify({
+    language: state.language,
+    households: state.households,
+    bills: state.bills,
+    collectorSettings: state.collectorSettings,
+    history: state.history
+  }));
+}
+
+// Service worker registration
 function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').then((reg) => {
-      console.log('Service Worker registered successfully');
+      console.log('Service Worker registered successfully with scope:', reg.scope);
     }).catch((err) => {
       console.error('Service Worker registration failed:', err);
     });
   }
 }
 
-// LocalStorage Synchronization
-function loadFromLocalStorage() {
-  const savedState = localStorage.getItem('condo_portal_state');
-  if (savedState) {
-    try {
-      const parsed = JSON.parse(savedState);
-      state = { ...state, ...parsed };
-    } catch (e) {
-      console.error('Failed to parse state', e);
-    }
-  }
+// 4. Update UI Texts & Language Translation
+function updateUILanguage() {
+  const lang = state.language;
+  const t = I18N[lang];
+  
+  // Active state indicator on language switch buttons
+  document.getElementById('lang-en-indicator').style.display = lang === 'en' ? 'inline-block' : 'none';
+  document.getElementById('lang-am-indicator').style.display = lang === 'am' ? 'inline-block' : 'none';
 
-  const savedUsers = localStorage.getItem('condo_registered_users');
-  if (savedUsers) {
-    try {
-      registeredUsers = JSON.parse(savedUsers);
-    } catch (e) {
-      console.error(e);
-    }
-  } else {
-    // Inject a default mock developer user
-    registeredUsers = [
-      { 
-        phone: '0911223344', 
-        name: 'Minas Junior', 
-        password: 'password', 
-        streak: 3, 
-        paidMonths: ['Jan', 'Feb', 'Mar'] // Pre-loaded 3 months paid
+  // Translate static data elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) {
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        el.placeholder = t[key];
+      } else {
+        el.textContent = t[key];
       }
-    ];
-    localStorage.setItem('condo_registered_users', JSON.stringify(registeredUsers));
-  }
-
-  // Ensure default room exists if rooms are empty
-  if (state.rooms.length === 0) {
-    const defaultRoom = {
-      id: 'r_default',
-      name: 'Condo Block B-4',
-      dueDate: 25,
-      bonus: 5,
-      waterBill: 2000,
-      waterMethod: 'headcount',
-      elecBill: 1500,
-      elecMethod: 'equal',
-      securityBill: 3000,
-      securityMethod: 'equal',
-      households: JSON.parse(JSON.stringify(DEFAULT_RESIDENTS_PRESET))
-    };
-    state.rooms.push(defaultRoom);
-    state.activeRoomId = defaultRoom.id;
-    saveToLocalStorage();
-  }
-}
-
-function saveToLocalStorage() {
-  localStorage.setItem('condo_portal_state', JSON.stringify({
-    theme: state.theme,
-    language: state.language,
-    activeUser: state.activeUser,
-    activeRoomId: state.activeRoomId,
-    rooms: state.rooms,
-    history: state.history
-  }));
-  localStorage.setItem('condo_registered_users', JSON.stringify(registeredUsers));
-}
-
-// Toggle Auth Screens vs App Dashboard
-function toggleAuthAppView() {
-  const authView = document.getElementById('auth-view');
-  const appView = document.getElementById('app-view');
-  const profileWidget = document.getElementById('user-profile-widget');
-
-  if (state.activeUser) {
-    authView.style.display = 'none';
-    appView.style.display = 'block';
-    profileWidget.style.display = 'flex';
-    document.getElementById('profile-name-text').textContent = state.activeUser.name;
-    
-    // Core loads
-    updateUILanguage();
-    populateRoomSwitcher();
-    loadActiveRoom();
-    renderCoffeeBeanGrid();
-    renderHistory();
-  } else {
-    authView.style.display = 'block';
-    appView.style.display = 'none';
-    profileWidget.style.display = 'none';
-    document.getElementById('login-card').style.display = 'block';
-    document.getElementById('register-card').style.display = 'none';
-    updateUILanguage();
-  }
-}
-
-// 4. Room Loader & Setup
-function populateRoomSwitcher() {
-  const select = document.getElementById('room-selector');
-  const wrapper = document.getElementById('room-selector-wrapper');
-  
-  if (state.rooms.length <= 1) {
-    wrapper.style.display = 'none';
-    return;
-  }
-  
-  wrapper.style.display = 'block';
-  select.innerHTML = '';
-  
-  state.rooms.forEach(room => {
-    const opt = document.createElement('option');
-    opt.value = room.id;
-    opt.textContent = room.name;
-    if (room.id === state.activeRoomId) opt.selected = true;
-    select.appendChild(opt);
-  });
-}
-
-function loadActiveRoom() {
-  const room = state.rooms.find(r => r.id === state.activeRoomId);
-  if (!room) return;
-
-  // Active details box
-  document.getElementById('active-room-box').style.display = 'flex';
-  document.getElementById('text-room-name').textContent = room.name;
-  document.getElementById('text-due-date').textContent = `${room.dueDate}th of the month`;
-  document.getElementById('text-discount-percentage').textContent = `${room.bonus}% Early-Bird Discount`;
-  
-  // Set Sliders values
-  document.getElementById('input-water-bill').value = room.waterBill;
-  document.getElementById('val-water-bill').textContent = `${room.waterBill} ETB`;
-  document.getElementById('method-water-bill').value = room.waterMethod;
-
-  document.getElementById('input-elec-bill').value = room.elecBill;
-  document.getElementById('val-elec-bill').textContent = `${room.elecBill} ETB`;
-  document.getElementById('method-elec-bill').value = room.elecMethod;
-
-  document.getElementById('input-security-bill').value = room.securityBill;
-  document.getElementById('val-security-bill').textContent = `${room.securityBill} ETB`;
-  document.getElementById('method-security-bill').value = room.securityMethod;
-
-  // Render lists and calculate
-  renderHouseholds();
-  calculateAndRenderResults();
-  checkDueDateNotifications(room);
-}
-
-// Due Date notification banner triggers
-function checkDueDateNotifications(room) {
-  const now = new Date();
-  const todayDay = now.getDate();
-  const banner = document.getElementById('due-date-alert');
-  
-  // Alert if today is within 3 days before or on the due date
-  const delta = room.dueDate - todayDay;
-  
-  if (delta >= 0 && delta <= 3) {
-    banner.style.display = 'flex';
-    document.getElementById('alert-room-name').textContent = room.name;
-    document.getElementById('alert-due-date').textContent = `${room.dueDate}th`;
-    
-    // Highlight if early bird is active
-    if (delta > 0 && room.bonus > 0) {
-      document.getElementById('early-bonus-banner').style.display = 'inline-block';
-    } else {
-      document.getElementById('early-bonus-banner').style.display = 'none';
     }
-  } else {
-    banner.style.display = 'none';
-    document.getElementById('early-bonus-banner').style.display = 'none';
-  }
+  });
+
+  // Re-translate placeholders in inputs specifically
+  document.getElementById('household-flat').placeholder = t.ph_flat;
+  document.getElementById('household-name').placeholder = t.ph_name;
+  document.getElementById('collector-name').placeholder = t.ph_collector;
+  document.getElementById('telebirr-no').placeholder = t.ph_telebirr;
+  document.getElementById('cbe-acc').placeholder = t.ph_cbe;
+  document.getElementById('cbe-bank').placeholder = t.ph_bank;
 }
 
 // 5. Render Households List
 function renderHouseholds() {
-  const room = state.rooms.find(r => r.id === state.activeRoomId);
-  if (!room) return;
-
   const container = document.getElementById('households-list-container');
   const t = I18N[state.language];
   
-  // Set Stat Values
-  const activeCount = room.households.filter(h => h.active).length;
-  const totalOccupants = room.households.reduce((acc, h) => acc + (h.active ? Number(h.occupants) : 0), 0);
+  // Set Stat Values in Board
+  const activeCount = state.households.filter(h => h.active).length;
+  const totalOccupants = state.households.reduce((acc, h) => acc + (h.active ? Number(h.occupants) : 0), 0);
   
   document.getElementById('stat-active-units').textContent = activeCount;
   document.getElementById('stat-residents').textContent = totalOccupants;
   
-  if (room.households.length === 0) {
+  if (state.households.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -459,7 +375,7 @@ function renderHouseholds() {
   
   container.innerHTML = '';
   
-  room.households.forEach(h => {
+  state.households.forEach(h => {
     const li = document.createElement('div');
     li.className = `list-item ${h.active ? '' : 'inactive-household'}`;
     li.style.opacity = h.active ? '1' : '0.5';
@@ -477,14 +393,6 @@ function renderHouseholds() {
     if (h.groundExempt && h.active) {
       groundFloorTagHtml = `<span class="badge badge-muted">${t.tpl_exempt_tag}</span>`;
     }
-
-    // Paid tag indicator
-    let paidTagHtml = '';
-    if (h.paid && h.active) {
-      paidTagHtml = `<span class="badge badge-gold" style="background-color: var(--success-green); color:#fff; border:none;">Paid ✓</span>`;
-    } else if (h.active) {
-      paidTagHtml = `<span class="badge badge-muted" style="border: 1px solid var(--border-color);">Pending</span>`;
-    }
     
     li.innerHTML = `
       <div class="item-info">
@@ -492,7 +400,6 @@ function renderHouseholds() {
           <span class="item-main-name">[${h.number}] ${h.name}</span>
           ${badgeHtml}
           ${groundFloorTagHtml}
-          ${paidTagHtml}
         </div>
         <div class="item-sub-desc">
           <span>
@@ -518,13 +425,11 @@ function renderHouseholds() {
   });
 }
 
-// Toggle household active
+// Toggle active status
 window.toggleHouseholdActive = function(id) {
-  const room = state.rooms.find(r => r.id === state.activeRoomId);
-  if (!room) return;
-  const index = room.households.findIndex(h => h.id === id);
+  const index = state.households.findIndex(h => h.id === id);
   if (index !== -1) {
-    room.households[index].active = !room.households[index].active;
+    state.households[index].active = !state.households[index].active;
     saveToLocalStorage();
     renderHouseholds();
     calculateAndRenderResults();
@@ -533,79 +438,121 @@ window.toggleHouseholdActive = function(id) {
 
 // Delete household
 window.deleteHousehold = function(id) {
-  const room = state.rooms.find(r => r.id === state.activeRoomId);
-  if (!room) return;
-  room.households = room.households.filter(h => h.id !== id);
+  state.households = state.households.filter(h => h.id !== id);
   saveToLocalStorage();
   renderHouseholds();
   calculateAndRenderResults();
   showToast(I18N[state.language].msg_deleted);
 };
 
-// 6. Dynamic Expense Sliders update binding
-function bindBillSliders() {
-  const room = state.rooms.find(r => r.id === state.activeRoomId);
-  if (!room) return;
-
-  const waterInput = document.getElementById('input-water-bill');
-  const elecInput = document.getElementById('input-elec-bill');
-  const secInput = document.getElementById('input-security-bill');
-
-  waterInput.addEventListener('input', (e) => {
-    room.waterBill = Number(e.target.value);
-    document.getElementById('val-water-bill').textContent = `${e.target.value} ETB`;
-    saveToLocalStorage();
-    calculateAndRenderResults();
-  });
-
-  elecInput.addEventListener('input', (e) => {
-    room.elecBill = Number(e.target.value);
-    document.getElementById('val-elec-bill').textContent = `${e.target.value} ETB`;
-    saveToLocalStorage();
-    calculateAndRenderResults();
-  });
-
-  secInput.addEventListener('input', (e) => {
-    room.securityBill = Number(e.target.value);
-    document.getElementById('val-security-bill').textContent = `${e.target.value} ETB`;
-    saveToLocalStorage();
-    calculateAndRenderResults();
-  });
-
-  // Method dropdown change bindings
-  document.getElementById('method-water-bill').addEventListener('change', (e) => {
-    room.waterMethod = e.target.value;
-    saveToLocalStorage();
-    calculateAndRenderResults();
-  });
-
-  document.getElementById('method-elec-bill').addEventListener('change', (e) => {
-    room.elecMethod = e.target.value;
-    saveToLocalStorage();
-    calculateAndRenderResults();
-  });
-
-  document.getElementById('method-security-bill').addEventListener('change', (e) => {
-    room.securityMethod = e.target.value;
-    saveToLocalStorage();
-    calculateAndRenderResults();
+// 6. Render Communal Bills Input Board
+function renderBillsInputBoard() {
+  const container = document.getElementById('bills-input-container');
+  const t = I18N[state.language];
+  
+  // Calculate total expense stat
+  const totalExpense = state.bills.reduce((acc, b) => acc + Number(b.amount || 0), 0);
+  document.getElementById('stat-total-expenses').textContent = formatETB(totalExpense);
+  
+  container.innerHTML = '';
+  
+  if (state.bills.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <p>${t.empty_bills}</p>
+      </div>
+    `;
+    return;
+  }
+  
+  state.bills.forEach((bill, idx) => {
+    const row = document.createElement('div');
+    row.className = 'bill-input-row';
+    
+    // Get translations for standard expense items if matched
+    let displayName = bill.name;
+    if (bill.name === 'Security Guard Fee') displayName = t.bill_security;
+    else if (bill.name === 'Garbage Collection') displayName = t.bill_garbage;
+    else if (bill.name === 'Water Pump Fuel & Elec') displayName = t.bill_pump;
+    else if (bill.name === 'Shared Hallway Light') displayName = t.bill_hallway;
+    
+    row.innerHTML = `
+      <div>
+        <input type="text" class="bill-name-input" value="${displayName}" data-id="${bill.id}" onchange="updateBillField('${bill.id}', 'name', this.value)" placeholder="${t.bill_name}">
+      </div>
+      <div class="bill-amount-wrapper">
+        <input type="number" class="bill-amount-input" value="${bill.amount || ''}" data-id="${bill.id}" onchange="updateBillField('${bill.id}', 'amount', this.value)" placeholder="0.00" min="0">
+      </div>
+      <div>
+        <select class="bill-method-select" data-id="${bill.id}" onchange="updateBillField('${bill.id}', 'splitMethod', this.value)">
+          <option value="equal" ${bill.splitMethod === 'equal' ? 'selected' : ''}>${t.method_equal}</option>
+          <option value="flat" ${bill.splitMethod === 'flat' ? 'selected' : ''}>${t.method_flat}</option>
+          <option value="headcount" ${bill.splitMethod === 'headcount' ? 'selected' : ''}>${t.method_headcount}</option>
+        </select>
+      </div>
+      <div>
+        <button class="btn-icon-only btn-danger" onclick="deleteBillRow('${bill.id}')" title="${t.btn_delete}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    `;
+    container.appendChild(row);
   });
 }
 
-// 7. Core Calculations & Split Summaries Engine
-let householdSplitDetails = {}; // Precise breakdowns
+// Update field in bill list
+window.updateBillField = function(id, field, value) {
+  const index = state.bills.findIndex(b => b.id === id);
+  if (index !== -1) {
+    if (field === 'amount') {
+      state.bills[index][field] = value === '' ? 0 : Number(value);
+    } else {
+      state.bills[index][field] = value;
+    }
+    saveToLocalStorage();
+    
+    // Recalculate stat board and results dynamically
+    const totalExpense = state.bills.reduce((acc, b) => acc + Number(b.amount || 0), 0);
+    document.getElementById('stat-total-expenses').textContent = formatETB(totalExpense);
+    
+    calculateAndRenderResults();
+  }
+};
+
+// Delete bill row
+window.deleteBillRow = function(id) {
+  state.bills = state.bills.filter(b => b.id !== id);
+  saveToLocalStorage();
+  renderBillsInputBoard();
+  calculateAndRenderResults();
+  showToast(I18N[state.language].msg_deleted);
+};
+
+// Add new bill row
+function addBillRow() {
+  const newId = 'b_' + Date.now();
+  state.bills.push({
+    id: newId,
+    name: '',
+    amount: '',
+    splitMethod: 'equal'
+  });
+  saveToLocalStorage();
+  renderBillsInputBoard();
+  calculateAndRenderResults();
+}
+
+// 7. Core Calculations & Split Results Visualizer
+let householdSplitDetails = {}; // Stores precise math breakdowns for details modal
 
 function calculateAndRenderResults() {
-  const room = state.rooms.find(r => r.id === state.activeRoomId);
-  if (!room) return;
-
   const t = I18N[state.language];
   const listContainer = document.getElementById('results-list-container');
   
-  const totalExpense = room.waterBill + room.elecBill + room.securityBill;
-  document.getElementById('stat-total-expenses').textContent = formatETB(totalExpense);
-
-  if (room.households.length === 0 || totalExpense <= 0) {
+  if (state.households.length === 0 || state.bills.length === 0) {
     listContainer.innerHTML = `
       <div class="empty-state">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
@@ -613,13 +560,13 @@ function calculateAndRenderResults() {
       </div>
     `;
     document.getElementById('telegram-template-textarea').value = '';
-    document.getElementById('my-share-val').textContent = '0.00 ETB';
     return;
   }
 
-  const activeHouseholds = room.households.filter(h => h.active);
+  // Active households
+  const activeHouseholds = state.households.filter(h => h.active);
   
-  // Reset breakdown details
+  // Reset breakdown detail store
   householdSplitDetails = {};
   activeHouseholds.forEach(h => {
     householdSplitDetails[h.id] = {
@@ -629,34 +576,43 @@ function calculateAndRenderResults() {
     };
   });
 
-  // Helper calculation matrix
-  const bills = [
-    { name: 'Shared Utility Water', amount: room.waterBill, method: room.waterMethod, id: 'w1', isPump: false },
-    { name: 'Water Pump Fuel & Elec', amount: room.elecBill, method: room.elecMethod, id: 'e1', isPump: true },
-    { name: 'Security Guard Fee', amount: room.securityBill, method: room.securityMethod, id: 's1', isPump: false }
-  ];
-
-  bills.forEach(bill => {
-    const amount = Number(bill.amount);
+  // Calculate splits for each bill
+  state.bills.forEach(bill => {
+    const amount = Number(bill.amount || 0);
     if (amount <= 0) return;
 
-    if (bill.method === 'equal') {
+    // Detect water pump/lift bills for exemption
+    // Standard names: "water pump", "pump", "ሊፍት", "ፓምፕ", "ቆሻሻ" is not, but water pump/lift is.
+    const isWaterPumpBill = bill.name.toLowerCase().includes('pump') || 
+                             bill.name.toLowerCase().includes('water pump') || 
+                             bill.name.toLowerCase().includes('lift') || 
+                             bill.name.includes('ፓምፕ') || 
+                             bill.name.includes('ሊፍት');
+
+    if (bill.splitMethod === 'equal') {
+      // WEIGHTED EQUAL SPLIT: Handles student discount (0.5 weight) and ground floor pump exemptions
+      
+      // Calculate weights
       let totalWeights = 0;
-      const weights = {};
+      const householdWeights = {};
 
       activeHouseholds.forEach(h => {
         let weight = 1.0;
-        if (bill.isPump && h.groundExempt) {
+        
+        // If it's a water pump bill and they are ground floor exempt, weight is 0
+        if (isWaterPumpBill && h.groundExempt) {
           weight = 0.0;
         } else if (h.studentDiscount) {
-          weight = 0.5;
+          weight = 0.5; // Students get 50% discount
         }
-        weights[h.id] = weight;
+
+        householdWeights[h.id] = weight;
         totalWeights += weight;
       });
 
+      // Split amount by weights
       activeHouseholds.forEach(h => {
-        const w = weights[h.id];
+        const w = householdWeights[h.id];
         const share = totalWeights > 0 ? (amount * (w / totalWeights)) : 0;
         
         householdSplitDetails[h.id].billsBreakdown.push({
@@ -669,7 +625,8 @@ function calculateAndRenderResults() {
         householdSplitDetails[h.id].totalOwed += share;
       });
 
-    } else if (bill.method === 'flat') {
+    } else if (bill.splitMethod === 'flat') {
+      // STRICTLY FLAT SPLIT: Strictly equal among all active households, ignoring all exemptions and student discounts
       const share = amount / activeHouseholds.length;
       
       activeHouseholds.forEach(h => {
@@ -683,28 +640,33 @@ function calculateAndRenderResults() {
         householdSplitDetails[h.id].totalOwed += share;
       });
 
-    } else if (bill.method === 'headcount') {
-      let totalOccupants = 0;
+    } else if (bill.splitMethod === 'headcount') {
+      // PER CAPITA SPLIT: Splits by the exact number of occupants in each active household, applying water pump exemptions if any
+      
+      let totalActiveOccupants = 0;
       activeHouseholds.forEach(h => {
-        if (bill.isPump && h.groundExempt) {
-          // Exempt from headcount for water pump
+        if (isWaterPumpBill && h.groundExempt) {
+          // Exempt from headcount sum for water pump
         } else {
-          totalOccupants += Number(h.occupants || 0);
+          totalActiveOccupants += Number(h.occupants || 0);
         }
       });
 
       activeHouseholds.forEach(h => {
-        let occ = Number(h.occupants || 0);
-        if (bill.isPump && h.groundExempt) {
-          occ = 0;
+        let householdOccupants = Number(h.occupants || 0);
+        
+        // Exempt ground floor from pump headcount split
+        if (isWaterPumpBill && h.groundExempt) {
+          householdOccupants = 0;
         }
-        const share = totalOccupants > 0 ? (amount * (occ / totalOccupants)) : 0;
+
+        const share = totalActiveOccupants > 0 ? (amount * (householdOccupants / totalActiveOccupants)) : 0;
         
         householdSplitDetails[h.id].billsBreakdown.push({
           billId: bill.id,
           billName: bill.name,
           method: 'headcount',
-          formula: occ === 0 ? `${t.tpl_exempt_tag}` : `${occ} / ${totalOccupants} (Heads)`,
+          formula: householdOccupants === 0 ? `${t.tpl_exempt_tag}` : `${householdOccupants} / ${totalActiveOccupants} (Heads)`,
           share: share
         });
         householdSplitDetails[h.id].totalOwed += share;
@@ -719,21 +681,10 @@ function calculateAndRenderResults() {
     const details = householdSplitDetails[h.id];
     if (!details) return;
 
-    // Apply early bird bonus discount if active
-    let bonusOwed = details.totalOwed;
-    let bonusText = '';
-    const now = new Date();
-    const todayDay = now.getDate();
-    
-    if (todayDay < room.dueDate && room.bonus > 0) {
-      const discount = details.totalOwed * (room.bonus / 100);
-      bonusOwed = details.totalOwed - discount;
-      bonusText = `<span style="color:var(--success-green); font-size:10px;">(-${room.bonus}% Early Bird)</span>`;
-    }
-
     const card = document.createElement('div');
     card.className = 'result-card';
     
+    // Notes description
     let notes = '';
     const noteItems = [];
     if (h.groundExempt) noteItems.push(t.tpl_exempt_tag);
@@ -747,102 +698,65 @@ function calculateAndRenderResults() {
     card.innerHTML = `
       <div>
         <div class="result-main">[${h.number}] ${h.name}</div>
-        <div class="result-notes">${notes} ${bonusText}</div>
+        <div class="result-notes">${notes}</div>
       </div>
       <div class="result-value-container">
-        <div class="result-value">${formatETB(bonusOwed)}</div>
+        <div class="result-value">${formatETB(details.totalOwed)}</div>
         <a class="result-breakdown-link" onclick="openBreakdownModal('${h.id}')">${t.btn_view_details}</a>
       </div>
     `;
     listContainer.appendChild(card);
   });
 
-  // Update active logged-in user's individual net share dynamically
-  updateMyShareDisplay(room);
-
   // Render Telegram template preview
-  generateTelegramTemplateText(room);
+  generateTelegramTemplateText();
 }
 
-// Update Active logged-in user individual net share widget
-function updateMyShareDisplay(room) {
-  if (!state.activeUser) return;
-  
-  // Match active user's phone to a household unit name or phone, or defaults to the first unit
-  const activeHouseholds = room.households.filter(h => h.active);
-  if (activeHouseholds.length === 0) {
-    document.getElementById('my-share-val').textContent = '0.00 ETB';
-    return;
-  }
-
-  // Look for a resident that closely matches active user's name
-  let myUnit = activeHouseholds.find(h => h.name.toLowerCase().includes(state.activeUser.name.toLowerCase().split(' ')[0]));
-  if (!myUnit) {
-    // Default to the first unit in directory for simulator presentation
-    myUnit = activeHouseholds[0];
-  }
-
-  const details = householdSplitDetails[myUnit.id];
-  if (details) {
-    let owed = details.totalOwed;
-    const now = new Date();
-    if (now.getDate() < room.dueDate && room.bonus > 0) {
-      owed = details.totalOwed * (1 - (room.bonus / 100));
-    }
-    document.getElementById('my-share-val').textContent = formatETB(owed);
-  }
-}
-
-// 8. Generate Telegram Copier Template
-function generateTelegramTemplateText(room) {
+// 8. Generate Telegram & SMS copyable template text
+function generateTelegramTemplateText() {
   const lang = state.language;
   const t = I18N[lang];
   
+  // Format current date
   const now = new Date();
   const monthNamesEn = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const monthNamesAm = ["ጃንዋሪ (ጥር)", "ፌብሩዋሪ (የካቲት)", "ማርች (መጋቢት)", "አፕሪል (ሚያዝያ)", "ሜይ (ግንቦት)", "ጁን (ሰኔ)", "ጁላይ (ሐምሌ)", "ኦገስት (ነሐሴ)", "ሴፕቴምበር (መስከረም)", "ኦክቶበር (ጥቅምት)", "ኖቬምበር (ህዳር)", "ዲሴምበር (ታህሳስ)"];
   
   const currentMonthStr = lang === 'en' 
     ? `${monthNamesEn[now.getMonth()]} ${now.getFullYear()}`
-    : `${monthNamesAm[now.getMonth()]} ${now.getFullYear() - 8} (E.C)`;
+    : `${monthNamesAm[now.getMonth()]} ${now.getFullYear() - 8} (E.C)`; // Ethiopian Calendar approximation (-8 years for May)
 
-  const activeHouseholds = room.households.filter(h => h.active);
-  const totalExpense = room.waterBill + room.elecBill + room.securityBill;
+  const activeHouseholds = state.households.filter(h => h.active);
+  const totalExpense = state.bills.reduce((acc, b) => acc + Number(b.amount || 0), 0);
 
   let output = `${t.tpl_header}\n`;
-  output += `🏢 ${room.name}\n`;
   output += `━━━━━━━━━━━━━━━━━━━━━\n`;
   output += `${t.tpl_month}: ${currentMonthStr}\n`;
   output += `${t.tpl_total}: ${formatETB(totalExpense)}\n\n`;
   
-  // Core condo bills itemization
-  const waterMethodStr = room.waterMethod === 'headcount' ? ` ⁽${t.method_headcount}⁾` : '';
-  const elecMethodStr = room.elecMethod === 'equal' ? ` ⁽${t.method_equal}⁾` : '';
-  const securityMethodStr = room.securityMethod === 'equal' ? ` ⁽${t.method_equal}⁾` : '';
+  // Expense items list
+  state.bills.forEach(bill => {
+    let billDisplayName = bill.name;
+    if (bill.name === 'Security Guard Fee') billDisplayName = t.bill_security;
+    else if (bill.name === 'Garbage Collection') billDisplayName = t.bill_garbage;
+    else if (bill.name === 'Water Pump Fuel & Elec') billDisplayName = t.bill_pump;
+    else if (bill.name === 'Shared Hallway Light') billDisplayName = t.bill_hallway;
+    
+    // Method indicator
+    let methodInd = '';
+    if (bill.splitMethod === 'flat') methodInd = ' ⁽Strict Flat⁾';
+    else if (bill.splitMethod === 'headcount') methodInd = ' ⁽Per Capita⁾';
 
-  output += `💧 ${t.bill_water}: ${formatETB(room.waterBill)}${waterMethodStr}\n`;
-  output += `⚡ ${t.bill_pump}: ${formatETB(room.elecBill)}${elecMethodStr}\n`;
-  output += `💂 ${t.bill_security}: ${formatETB(room.securityBill)}${securityMethodStr}\n`;
-  
-  // Early bird check
-  const isEarly = now.getDate() < room.dueDate;
-  if (room.bonus > 0) {
-    output += `🎁 Early Payment Discount: ${room.bonus}% off if paid before the ${room.dueDate}th!\n`;
-  }
+    output += `• ${billDisplayName}: ${formatETB(bill.amount || 0)}${methodInd}\n`;
+  });
   
   output += `\n${t.tpl_breakdown_hdr}:\n`;
   output += `─────────────────────\n`;
   
+  // Individual household shares list
   activeHouseholds.forEach(h => {
     const details = householdSplitDetails[h.id];
     if (!details) return;
-
-    let owed = details.totalOwed;
-    let discTag = '';
-    if (isEarly && room.bonus > 0) {
-      owed = details.totalOwed * (1 - (room.bonus / 100));
-      discTag = ` [Early Discount Applied]`;
-    }
 
     let flagStr = '';
     const flags = [];
@@ -853,10 +767,11 @@ function generateTelegramTemplateText(room) {
       flagStr = ` (${flags.join(', ')})`;
     }
 
-    output += `👉 [${h.number}] ${h.name}: ${formatETB(owed)}${flagStr}${discTag}\n`;
+    output += `👉 [${h.number}] ${h.name}: ${formatETB(details.totalOwed)}${flagStr}\n`;
   });
   
-  const inactiveHouseholds = room.households.filter(h => !h.active);
+  // Inactive units list (if any)
+  const inactiveHouseholds = state.households.filter(h => !h.active);
   if (inactiveHouseholds.length > 0) {
     output += `─────────────────────\n`;
     output += `⚠️ ${t.tpl_inactive_tag} (Unsplit):\n`;
@@ -865,8 +780,8 @@ function generateTelegramTemplateText(room) {
     });
   }
 
-  // Payment configuration
-  const c = state.collectorSettings || {};
+  // Payment configuration info
+  const c = state.collectorSettings;
   const hasCollector = c.name || c.telebirr || c.cbeAccount;
   
   if (hasCollector) {
@@ -886,7 +801,7 @@ function generateTelegramTemplateText(room) {
   document.getElementById('telegram-template-textarea').value = output;
 }
 
-// 9. Interactive Breakdown Modal
+// 9. Interactive Modals & Toast Utilities
 window.openBreakdownModal = function(householdId) {
   const details = householdSplitDetails[householdId];
   if (!details) return;
@@ -901,10 +816,12 @@ window.openBreakdownModal = function(householdId) {
 
   details.billsBreakdown.forEach(item => {
     let billDisplayName = item.billName;
-    if (item.billName === 'Shared Utility Water') billDisplayName = t.bill_water;
-    else if (item.billName === 'Water Pump Fuel & Elec') billDisplayName = item.billName.includes('Pump') ? t.bill_pump : t.bill_water;
-    else if (item.billName === 'Security Guard Fee') billDisplayName = t.bill_security;
+    if (item.billName === 'Security Guard Fee') billDisplayName = t.bill_security;
+    else if (item.billName === 'Garbage Collection') billDisplayName = t.bill_garbage;
+    else if (item.billName === 'Water Pump Fuel & Elec') billDisplayName = t.bill_pump;
+    else if (item.billName === 'Shared Hallway Light') billDisplayName = t.bill_hallway;
 
+    // Split method translation
     let methodText = '';
     if (item.method === 'equal') methodText = t.method_equal;
     else if (item.method === 'flat') methodText = t.method_flat;
@@ -920,6 +837,7 @@ window.openBreakdownModal = function(householdId) {
     tableBody.appendChild(row);
   });
 
+  // Modal Total Row
   const totalRow = document.createElement('div');
   totalRow.className = 'breakdown-row breakdown-total';
   totalRow.innerHTML = `
@@ -936,132 +854,51 @@ window.closeBreakdownModal = function() {
   document.getElementById('details-modal-overlay').classList.remove('active');
 };
 
-// 10. Coffee-Bean Payment Activity Grid & Streaks
-function renderCoffeeBeanGrid() {
-  const grid = document.getElementById('coffee-bean-grid');
-  const counter = document.getElementById('streak-score-counter');
-  if (!state.activeUser) return;
-
-  grid.innerHTML = '';
+// Copy template text to clipboard
+function copyTemplateToClipboard() {
+  const textarea = document.getElementById('telegram-template-textarea');
+  textarea.select();
+  textarea.setSelectionRange(0, 99999); // For mobile devices
   
-  // Calculate Streak
-  let streak = state.activeUser.streak || 0;
-  counter.textContent = `${streak} Month Streak 🔥`;
-
-  // Draw 12 cells representing months Jan-Dec
-  MONTH_ABBRS.forEach((month, index) => {
-    const cell = document.createElement('div');
-    cell.className = 'bean-cell';
-    
-    // Check if user has paid this month
-    const isPaid = state.activeUser.paidMonths.includes(month);
-    
-    if (isPaid) {
-      // Determine shade of roast (early paid gets gold glazed, regular gets medium espresso)
-      cell.classList.add('paid-4'); 
-    }
-
-    // Add Tooltip Amharic/English
-    const tooltip = document.createElement('span');
-    tooltip.className = 'bean-cell-tooltip';
-    
-    const amName = MONTH_NAMES_AM[index];
-    const statusText = isPaid ? 'Paid (የተከፈለ ✓)' : 'Pending (ያልተከፈለ)';
-    tooltip.textContent = `${amName} : ${statusText}`;
-    
-    cell.appendChild(tooltip);
-    
-    // Click cell to mock-toggle payment state manually
-    cell.addEventListener('click', () => {
-      toggleMonthPaymentManual(month);
-    });
-
-    grid.appendChild(cell);
+  navigator.clipboard.writeText(textarea.value).then(() => {
+    showToast(I18N[state.language].msg_copied);
+  }).catch(err => {
+    console.error('Could not copy text: ', err);
   });
 }
 
-function toggleMonthPaymentManual(month) {
-  if (!state.activeUser) return;
+// Toast indicator notification
+function showToast(message) {
+  const toast = document.getElementById('toast-container');
+  document.getElementById('toast-message-text').textContent = message;
+  toast.classList.add('show');
   
-  const userIndex = registeredUsers.findIndex(u => u.phone === state.activeUser.phone);
-  if (userIndex === -1) return;
-
-  const paidMonths = registeredUsers[userIndex].paidMonths;
-  const monthIndex = paidMonths.indexOf(month);
-  
-  if (monthIndex !== -1) {
-    paidMonths.splice(monthIndex, 1);
-  } else {
-    paidMonths.push(month);
-  }
-
-  // Recalculate streak
-  recalculateUserStreak(userIndex);
-  
-  // Update state
-  state.activeUser = registeredUsers[userIndex];
-  saveToLocalStorage();
-  renderCoffeeBeanGrid();
-  
-  showToast(paidMonths.includes(month) ? "Month marked paid!" : "Month payment removed.");
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3500);
 }
 
-function recalculateUserStreak(userIndex) {
-  const paidMonths = registeredUsers[userIndex].paidMonths;
-  let streak = 0;
-  
-  // Walk sequence from Jan to Dec to count consecutive paid months
-  for (let i = 0; i < MONTH_ABBRS.length; i++) {
-    if (paidMonths.includes(MONTH_ABBRS[i])) {
-      streak++;
-    } else {
-      break;
+// Number formatter
+function formatETB(val) {
+  const num = Number(val || 0);
+  return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ETB';
+}
+
+// 10. Preset Loader Helpers
+function loadHouseholdPreset(type) {
+  if (confirm(I18N[state.language].confirm_reset)) {
+    if (type === 'blockB4') {
+      state.households = JSON.parse(JSON.stringify(PRESETS.blockB4));
+    } else if (type === 'sharedFlat') {
+      state.households = JSON.parse(JSON.stringify(PRESETS.sharedFlat));
     }
+    saveToLocalStorage();
+    renderHouseholds();
+    calculateAndRenderResults();
   }
-  registeredUsers[userIndex].streak = streak;
 }
 
-// Pay Net Share Button Mock Click handler
-function payMyShareTelebirr() {
-  if (!state.activeUser) return;
-
-  // Determine current system month
-  const now = new Date();
-  const currentMonthAbbr = MONTH_ABBRS[now.getMonth()];
-
-  const userIndex = registeredUsers.findIndex(u => u.phone === state.activeUser.phone);
-  if (userIndex === -1) return;
-
-  const paidMonths = registeredUsers[userIndex].paidMonths;
-  
-  if (paidMonths.includes(currentMonthAbbr)) {
-    showToast("This month is already marked as paid!");
-    return;
-  }
-
-  // Pay and reward
-  paidMonths.push(currentMonthAbbr);
-  
-  // Set other room residents as partially paid randomly for realistic presentation
-  const room = state.rooms.find(r => r.id === state.activeRoomId);
-  if (room) {
-    room.households.forEach(h => {
-      if (Math.random() > 0.4) h.paid = true;
-    });
-  }
-
-  recalculateUserStreak(userIndex);
-  state.activeUser = registeredUsers[userIndex];
-  
-  saveToLocalStorage();
-  renderHouseholds();
-  renderCoffeeBeanGrid();
-  calculateAndRenderResults();
-  
-  showToast("🎉 CBE/Telebirr Paid! Streak Extended!");
-}
-
-// 11. Custom Static History logger
+// 11. Historical Log Saving System
 function renderHistory() {
   const container = document.getElementById('history-logs-container');
   const t = I18N[state.language];
@@ -1098,49 +935,51 @@ function renderHistory() {
 }
 
 function saveCurrentToHistory() {
-  const room = state.rooms.find(r => r.id === state.activeRoomId);
-  if (!room) return;
-
   const t = I18N[state.language];
-  const total = room.waterBill + room.elecBill + room.securityBill;
+  const total = state.bills.reduce((acc, b) => acc + Number(b.amount || 0), 0);
   if (total <= 0) {
     alert(t.empty_bills);
     return;
   }
 
+  // Format current date period
   const now = new Date();
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const periodStr = `${months[now.getMonth()]} ${now.getFullYear()}`;
 
   const logId = 'hist_' + Date.now();
-  const summaryStr = `Room: ${room.name} | ${room.households.filter(h => h.active).length} active households`;
+  const summaryStr = `${state.bills.length} bills split among ${state.households.filter(h => h.active).length} active units`;
 
   const newHistoryItem = {
     id: logId,
     period: periodStr,
     total: total,
     summary: summaryStr,
-    roomSnapshot: JSON.parse(JSON.stringify(room))
+    householdsSnapshot: JSON.parse(JSON.stringify(state.households)),
+    billsSnapshot: JSON.parse(JSON.stringify(state.bills))
   };
 
-  state.history.unshift(newHistoryItem);
+  if (!state.history) state.history = [];
+  state.history.unshift(newHistoryItem); // Add to beginning of history
+  
   saveToLocalStorage();
   renderHistory();
-  showToast("Period logged successfully!");
+  showToast("Month saved to logs!");
 }
 
 window.reloadHistoryItem = function(id) {
   const item = state.history.find(h => h.id === id);
-  if (item && confirm("Do you want to reload this snapshot? This will replace your active room database configuration.")) {
+  if (item && confirm("Do you want to reload this snapshot? This will replace your current active list and bills.")) {
+    state.households = JSON.parse(JSON.stringify(item.householdsSnapshot));
+    state.bills = JSON.parse(JSON.stringify(item.billsSnapshot));
+    saveToLocalStorage();
     
-    // Replace active room matching properties
-    const activeRoom = state.rooms.find(r => r.id === state.activeRoomId);
-    if (activeRoom) {
-      Object.assign(activeRoom, JSON.parse(JSON.stringify(item.roomSnapshot)));
-      saveToLocalStorage();
-      loadActiveRoom();
-      showToast("Snapshot restored!");
-    }
+    // Re-render
+    renderHouseholds();
+    renderBillsInputBoard();
+    calculateAndRenderResults();
+    
+    showToast("Snapshot reloaded!");
   }
 };
 
@@ -1151,33 +990,27 @@ window.deleteHistoryItem = function(id) {
   showToast(I18N[state.language].msg_deleted);
 };
 
-// 12. View Setup and Event Connections
-function setupEventListeners() {
-  
-  // Collapsible Help Banner
-  document.getElementById('btn-close-help').addEventListener('click', () => {
-    document.getElementById('onboarding-help-box').classList.add('collapsed');
-    localStorage.setItem('condo_onboarding_collapsed', 'true');
-  });
-
-  // Light/Dark Theme toggle triggers
-  document.getElementById('btn-toggle-theme').addEventListener('click', () => {
-    const isLight = document.body.classList.toggle('light-theme');
-    state.theme = isLight ? 'light' : 'dark';
-    
-    document.getElementById('theme-moon-svg').style.display = isLight ? 'none' : 'inline-block';
-    document.getElementById('theme-sun-svg').style.display = isLight ? 'inline-block' : 'none';
-    
+function clearAllHistory() {
+  if (confirm(I18N[state.language].confirm_clear_history)) {
+    state.history = [];
     saveToLocalStorage();
-    renderCoffeeBeanGrid(); // Re-render heatmaps with new variables
-  });
+    renderHistory();
+    showToast("History cleared.");
+  }
+}
 
-  // Language Toggles
+// 12. Setup Event Listeners
+function setupEventListeners() {
+  const t = I18N[state.language];
+
+  // Language buttons
   document.getElementById('lang-en-btn').addEventListener('click', () => {
     state.language = 'en';
     saveToLocalStorage();
     updateUILanguage();
-    loadActiveRoom();
+    renderHouseholds();
+    renderBillsInputBoard();
+    calculateAndRenderResults();
     renderHistory();
   });
   
@@ -1185,124 +1018,16 @@ function setupEventListeners() {
     state.language = 'am';
     saveToLocalStorage();
     updateUILanguage();
-    loadActiveRoom();
+    renderHouseholds();
+    renderBillsInputBoard();
+    calculateAndRenderResults();
     renderHistory();
   });
 
-  // Mock Authentication Flow handlers
-  document.getElementById('link-to-register').addEventListener('click', () => {
-    document.getElementById('login-card').style.display = 'none';
-    document.getElementById('register-card').style.display = 'block';
-  });
-
-  document.getElementById('link-to-login').addEventListener('click', () => {
-    document.getElementById('register-card').style.display = 'none';
-    document.getElementById('login-card').style.display = 'block';
-  });
-
-  // Auth Forms submissions
-  document.getElementById('register-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('register-name').value.trim();
-    const phone = document.getElementById('register-phone').value.trim();
-    const password = document.getElementById('register-password').value.trim();
-
-    if (!name || !phone || !password) return;
-
-    // Check if phone exists
-    if (registeredUsers.some(u => u.phone === phone)) {
-      alert("This phone number is already registered!");
-      return;
-    }
-
-    const newUser = {
-      phone,
-      name,
-      password,
-      streak: 1,
-      paidMonths: ['Jan'] // Starter paid month
-    };
-
-    registeredUsers.push(newUser);
-    state.activeUser = newUser;
-    saveToLocalStorage();
-    toggleAuthAppView();
-    showToast("Profile created successfully!");
-  });
-
-  document.getElementById('login-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const phone = document.getElementById('login-phone').value.trim();
-    const password = document.getElementById('login-password').value.trim();
-
-    // Verify credentials
-    const user = registeredUsers.find(u => u.phone === phone && u.password === password);
-    
-    if (user) {
-      state.activeUser = user;
-      saveToLocalStorage();
-      toggleAuthAppView();
-      showToast("Access Granted!");
-    } else {
-      alert("Invalid Phone Number or Password!");
-    }
-  });
-
-  document.getElementById('btn-logout').addEventListener('click', () => {
-    state.activeUser = null;
-    saveToLocalStorage();
-    toggleAuthAppView();
-  });
-
-  // Room creation forms
-  document.getElementById('create-room-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('room-name').value.trim();
-    const dueDate = Number(document.getElementById('room-due-date').value);
-    const bonus = Number(document.getElementById('room-bonus').value) || 0;
-
-    if (!name) return;
-
-    const newRoomId = 'r_' + Date.now();
-    const newRoom = {
-      id: newRoomId,
-      name: name,
-      dueDate: dueDate,
-      bonus: bonus,
-      waterBill: 2000,
-      waterMethod: 'headcount',
-      elecBill: 1500,
-      elecMethod: 'equal',
-      securityBill: 3000,
-      securityMethod: 'equal',
-      households: JSON.parse(JSON.stringify(DEFAULT_RESIDENTS_PRESET))
-    };
-
-    state.rooms.push(newRoom);
-    state.activeRoomId = newRoomId;
-    
-    saveToLocalStorage();
-    populateRoomSwitcher();
-    loadActiveRoom();
-    
-    document.getElementById('room-name').value = '';
-    showToast("Virtual condo room created!");
-  });
-
-  // Room Switch selector
-  document.getElementById('room-selector').addEventListener('change', (e) => {
-    state.activeRoomId = e.target.value;
-    saveToLocalStorage();
-    loadActiveRoom();
-  });
-
-  // Add resident handler
+  // Form submit - Household
   document.getElementById('add-household-form').addEventListener('submit', (e) => {
     e.preventDefault();
     
-    const room = state.rooms.find(r => r.id === state.activeRoomId);
-    if (!room) return;
-
     const flatInput = document.getElementById('household-flat');
     const nameInput = document.getElementById('household-name');
     const occupantsInput = document.getElementById('household-occupants');
@@ -1318,11 +1043,10 @@ function setupEventListeners() {
       occupants: Number(occupantsInput.value) || 1,
       groundExempt: groundExemptInput.checked,
       studentDiscount: studentDiscountInput.checked,
-      active: true,
-      paid: false
+      active: true
     };
 
-    room.households.push(newHousehold);
+    state.households.push(newHousehold);
     saveToLocalStorage();
     
     // Reset inputs
@@ -1337,7 +1061,10 @@ function setupEventListeners() {
     flatInput.focus();
   });
 
-  // CBE/Telebirr settings config submit
+  // Buttons inside Bill Board
+  document.getElementById('btn-add-bill-row').addEventListener('click', addBillRow);
+  
+  // Save payment config settings
   document.getElementById('collector-settings-form').addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -1349,22 +1076,17 @@ function setupEventListeners() {
     };
     
     saveToLocalStorage();
-    calculateAndRenderResults();
+    calculateAndRenderResults(); // Refresh generated template text
     showToast("Configuration saved!");
   });
 
-  // Load collector config fields
-  if (state.collectorSettings) {
-    document.getElementById('collector-name').value = state.collectorSettings.name || '';
-    document.getElementById('telebirr-no').value = state.collectorSettings.telebirr || '';
-    document.getElementById('cbe-acc').value = state.collectorSettings.cbeAccount || '';
-    document.getElementById('cbe-bank').value = state.collectorSettings.cbeBank || '';
-  }
+  // Load collector settings inputs from state
+  document.getElementById('collector-name').value = state.collectorSettings.name || '';
+  document.getElementById('telebirr-no').value = state.collectorSettings.telebirr || '';
+  document.getElementById('cbe-acc').value = state.collectorSettings.cbeAccount || '';
+  document.getElementById('cbe-bank').value = state.collectorSettings.cbeBank || '';
 
-  // Pay net share Telebirr mock connector
-  document.getElementById('btn-pay-now').addEventListener('click', payMyShareTelebirr);
-
-  // Tab switcher
+  // Tab selections
   const tabBreakdown = document.getElementById('tab-breakdown-btn');
   const tabTemplate = document.getElementById('tab-template-btn');
   const breakdownView = document.getElementById('results-breakdown-view');
@@ -1384,47 +1106,25 @@ function setupEventListeners() {
     breakdownView.style.display = 'none';
   });
 
-  // Clipboard copies
-  document.getElementById('btn-copy-template').addEventListener('click', () => {
-    const textarea = document.getElementById('telegram-template-textarea');
-    textarea.select();
-    textarea.setSelectionRange(0, 99999);
-    
-    navigator.clipboard.writeText(textarea.value).then(() => {
-      showToast(I18N[state.language].msg_copied);
-    }).catch(err => {
-      console.error(err);
-    });
-  });
-
-  // Logs connections
-  document.getElementById('btn-log-history').addEventListener('click', saveCurrentToHistory);
-  document.getElementById('btn-clear-history').addEventListener('click', () => {
-    if (confirm(I18N[state.language].confirm_clear_history)) {
-      state.history = [];
+  // Clipboard copy and clear
+  document.getElementById('btn-copy-template').addEventListener('click', copyTemplateToClipboard);
+  
+  document.getElementById('btn-clear-calculator').addEventListener('click', () => {
+    if (confirm(I18N[state.language].confirm_reset)) {
+      state.households = [];
+      state.bills = [];
       saveToLocalStorage();
-      renderHistory();
-      showToast("Logs cleared successfully.");
+      renderHouseholds();
+      renderBillsInputBoard();
+      calculateAndRenderResults();
     }
   });
 
-  // Bind dynamic sliders
-  bindBillSliders();
-}
+  // History button connections
+  document.getElementById('btn-log-history').addEventListener('click', saveCurrentToHistory);
+  document.getElementById('btn-clear-history').addEventListener('click', clearAllHistory);
 
-// Clipboard copy helper toast triggers
-function showToast(message) {
-  const toast = document.getElementById('toast-container');
-  document.getElementById('toast-message-text').textContent = message;
-  toast.classList.add('show');
-  
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 3500);
-}
-
-// Helpers format
-function formatETB(val) {
-  const num = Number(val || 0);
-  return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ETB';
+  // Preset button connections
+  document.getElementById('btn-preset-block').addEventListener('click', () => loadHouseholdPreset('blockB4'));
+  document.getElementById('btn-preset-shared').addEventListener('click', () => loadHouseholdPreset('sharedFlat'));
 }
